@@ -1,0 +1,1 @@
+export const randomUUID = crypto.randomUUID?(()=>crypto.randomUUID()):((r,h)=>(n=>(s=>()=>'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,c=>s[c]()))({x:()=>h[n()],y:()=>h[n()%4+8]}))(()=>r.next().value))((function*(b){while(!0){for(var i of crypto.getRandomValues(b)){yield Math.trunc(i/16);yield i%16;}}})(new Uint8Array(256)),'0123456789abcdef');

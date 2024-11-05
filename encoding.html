@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" class="d-flex h-100">
+<head>
+  <meta charset="UTF-8">
+  <title>Encoding and Hashing</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚙️</text></svg>">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <link href="theme.css"  rel="stylesheet" />
+  <script type="module" src="encoding.js" defer></script>
+  <script type="module" src="darkModeSupport.js" defer></script>
+  <style>
+    #encodings {
+      display: grid;
+      grid-template-columns: repeat(var(--columns-counts, 1), 1fr);
+      gap: 1rem;
+    }
+
+    @media screen and (min-width: 1024px) { /* LG */
+      :root{
+        --columns-counts: 2;
+      }
+    }
+    @media screen and (min-width: 1440px) { /* XL */
+      :root{
+        --columns-counts: 3;
+      }
+    }
+    @media screen and (min-width: 1920px) { /* XXL */
+      :root{
+        --columns-counts: 4;
+      }
+    }
+  </style>
+</head>
+<body class="flex-fill d-flex flex-column p-3">
+  <div class="container">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a href="index.html">Web shorts</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Encoding and Hashing</li>
+      </ol>
+    </nav>
+    <p id="summary" class="mb-3">
+      The text area below are labelled with each supported encoding.
+      Paste your content in the associated encoding to have it converted to all other encoding.
+      Hashing solutions are obviously not reversible and therefore may only be read
+    </p>
+  </div>
+  <div id="encodings" class="flex-fill">
+  </div>
+</body>
+</html>

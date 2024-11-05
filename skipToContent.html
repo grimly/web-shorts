@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en" class="d-flex h-100">
+<head>
+  <meta charset="UTF-8">
+  <title>Skip to content</title>
+  <link rel="apple-touch-icon" sizes="180x180" href="icon/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="icon/android-chrome-512x512.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="icon/android-chrome-192x192.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="icon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="icon/favicon-16x16.png">
+  <link rel="stylesheet" href="//shared-uat.fr.world.socgen/sg-bootstrap/v5/5.15.1/core/css/sg-bootstrap-dark.min.css">
+  <link rel="stylesheet" href="//shared-uat.fr.world.socgen/sg-bootstrap/v5/5.15.1/icons/index.min.css">
+  <script type="module" defer>
+    import { combineLatest, distinctUntilChanged, fromEvent, map, merge, of, startWith, switchMap, takeUntil, tap } from "https://esm.sh/rxjs@7.8.1";
+
+    const configForm = document.forms.config;
+    const configuration = merge(
+      fromEvent(configForm, 'input'),
+      fromEvent(configForm, 'change')
+    )
+      .pipe(
+        startWith(undefined),
+        map(() => Array
+          .from(new FormData(configForm).entries())
+          .reduce(
+            (col, [key, val]) => ({...col, [key]: val}),
+            {}
+          )
+        ),
+        map(({indentation, ...rest}) => ({indentation: Number(indentation) || 0, ...rest})),
+        distinctUntilChanged((a, b) => JSON.stringify(a) === JSON.stringify(b))
+      );
+
+    const content = document.getElementById("content");
+    const marker = document.createComment("marker");
+    content.parentElement.insertBefore(marker, content);
+
+    configuration.pipe(map(({hasContent}) => hasContent === "true")).subscribe(hasContent => {
+      if (hasContent) {
+        marker.parentElement.insertBefore(content, marker.nextSibling);
+      } else {
+        if (content.parentElement) {
+          content.parentElement.removeChild(content);
+        }
+      }
+    })
+  </script>
+  <style>
+    #skipToContent:not(:focus) {
+      opacity: 0;
+      pointer-events: none;
+    }
+    :root:not(:has(#content)) #skipToContent {
+      display: none;
+      color: red!important;
+    }
+  </style>
+</head>
+<body class="flex-fill d-flex">
+  <div class="flex-fill container d-flex flex-column p-3">
+    <a id="skipToContent" class="btn btn-primary btn-lg position-absolute" href="#content">Skip to content</a>
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a href="index.html">Web shorts</a></li>
+        <li class="breadcrumb-item active" aria-current="page">
+          Skip to content
+        </li>
+      </ol>
+    </nav>
+    <p class="mb-3">
+      This page is a demonstration of a "Skip to content" feature that is only enabled if such content exists.
+    </p>
+    <form id="config" class="mb-3">
+      <div class="row">
+        <div class="col">
+          <label>Show content</label>
+          <div class="btn-group btn-group-toggle d-block">
+            <input id="content-inserted" class="btn-check" checked type="radio" name="hasContent" value="true" autocomplete="off">
+            <label for="content-inserted" class="btn btn-toggle-primary">
+              Yes
+            </label><!--
+          --><input id="content-excluded" class="btn-check" type="radio" name="hasContent" value="false" autocomplete="off"><!--
+          --><label for="content-excluded" class="btn btn-toggle-primary">
+              No
+            </label>
+          </div>
+        </div>
+      </div>
+    </form>
+    <div class="flex-fill d-flex row">
+      <div id="content" class="border border-secondary p-3 col">
+        <p class="mb-3">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam pulvinar gravida augue sed fringilla. Proin sagittis efficitur nunc at viverra. Vestibulum accumsan mollis rutrum. Ut lobortis nulla quis augue varius, sit amet venenatis arcu tincidunt. Donec sit amet elementum velit. Aenean faucibus, massa ac varius molestie, eros ipsum dapibus arcu, vitae blandit erat sem at nibh. Cras quis nibh faucibus, molestie dui ac, vehicula purus. Etiam nunc eros, feugiat id lacinia nec, consequat congue nunc.
+        </p>
+        <p class="mb-3"><a href="#">Here is a link</a> that should be focused the next time you hit <code>Tab</code> after you skipped to content</p>
+        <p class="mb-3">
+        Maecenas vehicula dui non leo sodales, egestas fringilla ligula pulvinar. Nunc nec eleifend nisi. Fusce rhoncus magna erat, pretium sagittis magna semper a. Integer ut dolor quis mauris mollis finibus eget eu mi. Nulla facilisi. Praesent tempus suscipit odio, ac faucibus ligula pulvinar nec. Maecenas ut est congue, ultrices urna a, blandit lectus. Morbi vel leo et nisl euismod vestibulum eu lobortis lorem. Sed id pharetra erat, pharetra tempor justo. Aliquam vel mi eu justo lacinia feugiat. Donec eu nibh lacinia, aliquam nisi vitae, vestibulum dolor. Aliquam mattis justo et velit dapibus elementum. Vestibulum fringilla commodo quam. Fusce ac dolor sed massa ultricies dignissim sit amet nec leo.
+        </p>
+        <p class="mb-3">
+        Aenean commodo condimentum fringilla. Nam rhoncus mi id dolor condimentum facilisis. Donec vitae accumsan augue. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Cras laoreet libero eget convallis facilisis. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Mauris eu enim velit. Nullam aliquam erat vitae mattis ultrices. Etiam ac commodo orci, nec mattis neque. Suspendisse potenti. Sed a porta tellus. Donec et ex vel dolor tincidunt dignissim. In euismod finibus sem in eleifend. Suspendisse erat felis, lacinia vel dolor eu, gravida luctus nibh. Duis vitae mollis mauris, at sagittis mauris. Vestibulum ut nulla quis nunc tristique molestie.
+        </p>
+        <p class="mb-3">
+        Mauris accumsan quam eget egestas efficitur. Aliquam posuere sapien at nisl cursus, eu sagittis justo aliquam. Maecenas quam massa, varius eget pellentesque venenatis, aliquet fermentum purus. Donec id neque in felis sodales faucibus. Sed pharetra molestie libero, a pellentesque metus lobortis eu. Integer at maximus nibh. Vivamus rutrum lacus erat, non dignissim ex tincidunt sodales. Nunc non blandit nisl. Vestibulum id risus sed mauris euismod imperdiet.
+        </p>
+        <p>
+        Quisque mattis, nisi laoreet consequat dignissim, ex tellus pellentesque odio, eget tempor tortor turpis vitae nisl. Aliquam malesuada nulla sit amet tristique ullamcorper. Nunc a sapien suscipit, sagittis nisi ut, ultrices augue. Nullam aliquam, neque eget laoreet gravida, urna mauris placerat erat, quis lobortis odio nisl vitae nulla. Phasellus dictum non est ut eleifend. Curabitur pulvinar justo ipsum, non ullamcorper arcu porttitor non. Nunc ullamcorper faucibus pulvinar. Fusce eu sodales ligula. Curabitur non risus commodo, aliquam tortor et, pulvinar metus. Vivamus sollicitudin, neque et posuere lobortis, libero eros elementum risus, vitae ullamcorper urna metus id nunc. Sed accumsan purus non sem maximus, ut tempor diam posuere. Phasellus iaculis felis turpis, eget suscipit nulla maximus non. Quisque vel leo sed felis sodales gravida id vehicula lectus. Aenean justo risus, bibendum at sagittis eget, placerat vel lacus. Morbi blandit, nisi sed aliquet vehicula, justo dui maximus odio, ac ultricies sem est eget ipsum.
+        </p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" class="d-flex h-100">
+<head>
+  <meta charset="UTF-8">
+  <title>OpenAPI Cleaner</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚙️</text></svg>">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <link href="theme.css"  rel="stylesheet" />
+  <script type="module" src="darkModeSupport.js" defer></script>
+  <script type="module" src="openapiCleaner.js" defer></script>
+</head>
+<body class="flex-fill d-flex">
+  <div class="flex-fill container d-flex flex-column p-3">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a href="index.html">Web shorts</a></li>
+        <li class="breadcrumb-item active" aria-current="page">
+          OpenAPI Cleaner
+        </li>
+      </ol>
+    </nav>
+    <p class="mb-3">
+      The text area below to the left will accept any OpenAPI document, remove all inaccessible elements then print it again to the right.
+    </p>
+    <div class="flex-fill d-flex row">
+      <form id="source" class="col d-flex flex-column">
+        <label for="sourceArea">Your OpenAPI</label>
+        <textarea id="sourceArea"
+                  name="area"
+                  class="form-control flex-grow-1"
+                  style="font-family: SFMono-Regular,Menlo,Monaco,Consolas,'Liberation Mono','Courier New',monospace; overflow-y: auto"
+                  placeholder="Place your OpenAPI here"
+                  aria-describedby="sourceHelpBlock"></textarea>
+        <small id="sourceHelpBlock" class="form-text text-muted">
+          Paste your OpenAPI here for cleaning.
+        </small>
+        <div class="d-flex align-items-start mt-2">
+          <span class="badge text-bg-info" el="badge">Getting prepared</span>
+        </div>
+      </form>
+      <form id="cleaned" class="col d-flex flex-column">
+        <label for="cleanedArea">Cleaned OpenAPI</label>
+        <textarea id="cleanedArea"
+                  name="area"
+                  class="form-control flex-grow-1"
+                  style="font-family: SFMono-Regular,Menlo,Monaco,Consolas,'Liberation Mono','Courier New',monospace; overflow-y: auto"
+                  placeholder="Find your cleaned OpenAPI here"
+                  readonly></textarea>
+        <div class="d-flex align-items-start mt-2">
+          <span class="badge text-bg-info" el="badge">Getting prepared</span>
+          <button class="ms-auto btn btn-primary" el="copyAction">
+            Copy
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en" class="d-flex h-100">
+<head>
+  <meta charset="UTF-8">
+  <title>JSON Formatter</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚙️</text></svg>">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <link href="theme.css"  rel="stylesheet" />
+  <script type="module" src="darkModeSupport.js" defer></script>
+  <script type="module" src="formatJson.js" defer></script>
+</head>
+<body class="flex-fill d-flex">
+  <div class="flex-fill container d-flex flex-column p-3">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a href="index.html">Web shorts</a></li>
+        <li class="breadcrumb-item active" aria-current="page">
+          JSON Formatter
+        </li>
+      </ol>
+    </nav>
+    <p class="mb-3">
+      The text area below will accept any JSON string then let you format it with the form below.
+    </p>
+    <form id="config" class="mb-3 row">
+      <div class="col">
+        <label class="pb-2">Format</label>
+        <div class="btn-group d-block">
+          <input id="format-pretty" class="btn-check" checked type="radio" name="format" value="pretty" autocomplete="off">
+          <label for="format-pretty" class="btn btn-outline-primary">
+            Pretty
+          </label><!--
+        --><input id="format-flat" class="btn-check" type="radio" name="format" value="flat" autocomplete="off"><!--
+        --><label for="format-flat" class="btn btn-outline-primary">
+            Flat
+          </label>
+        </div>
+      </div>
+      <div class="col">
+        <label class="pb-2">MIME Type</label>
+        <div class="btn-group d-block">
+          <input id="mime-json" class="btn-check" checked type="radio" name="type" value="json" autocomplete="off">
+          <label for="mime-json" class="btn btn-outline-primary">
+            JSON
+          </label><!--
+        --><input id="mime-yaml" class="btn-check" type="radio" name="type" value="yaml" autocomplete="off"><!--
+        --><label for="mime-yaml" class="btn btn-outline-primary">
+            YAML
+          </label>
+        </div>
+      </div>
+      <div class="col">
+        <label id="indentationLabel" for="indentation" class="pb-2">Indentation</label>
+        <input id="indentation"
+               name="indentation"
+               type="number"
+               class="form-control"
+               placeholder="Indentation"
+               aria-labelledby="indentationLabel"
+               aria-describedby="indentationHelpBlock"
+               value="2"/>
+        <small id="indentationHelpBlock" class="form-text text-muted">
+          Change the indentation when pretty printing your JSON.
+        </small>
+      </div>
+    </form>
+    <form id="editorForm" class="flex-grow-1 d-flex flex-column">
+      <div class="flex-grow-1 d-flex flex-column">
+        <label id="editorLabel" for="editor" class="pb-2">Editor</label>
+        <textarea id="editor"
+                  name="editor"
+                  class="form-control flex-grow-1"
+                  style="font-family: SFMono-Regular,Menlo,Monaco,Consolas,'Liberation Mono','Courier New',monospace; overflow-y: auto"
+                  placeholder="Place your JSON here"
+                  aria-labelledby="editorLabel"
+                  aria-describedby="editorHelpBlock"></textarea>
+        <small id="editorHelpBlock" class="form-text text-muted">
+          Paste your JSON here for pretty printing.
+        </small>
+      </div>
+      <div class="d-flex align-items-start mt-2">
+        <span id="validation" class="badge">Getting prepared</span>
+        <button class="ms-auto btn btn-secondary btn-icon-start" id="reorder" type="button">
+          Reorder properties
+        </button>
+        <button class="ms-2 btn btn-primary btn-icon-start" type="submit">
+          Copy
+        </button>
+      </div>
+    </form>
+  </div>
+</body>
+</html>
