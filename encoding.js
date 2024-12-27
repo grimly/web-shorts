@@ -127,7 +127,7 @@ addEncoding({
 addEncoding({
   label: "Base64Url",
   encode: v => bytesToB64(new TextEncoder().encode(v)).replace(/\//g, '_').replace(/\+/g, '-'),
-  decode: v => new TextDecoder().decode(v.replace(/_/g, "/").replace(/-/g, "+")),
+  decode: v => new TextDecoder().decode(b64toBytes(v.replace(/_/g, "/").replace(/-/g, "+"))),
 });
 
 function lpad(s, l) {
