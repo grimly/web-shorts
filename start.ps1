@@ -1,1 +1,0 @@
-deno run --allow-net --allow-read jsr:@std/http/file-server
