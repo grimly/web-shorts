@@ -1,5 +1,28 @@
 const listeners = [];
 
+/**
+ * @callback Encoder
+ * @param {Uint8Array} rawContent
+ * @returns {string} Encoded and visual version
+ */
+
+/**
+ * @callback Decoder
+ * @param {string} encoded
+ * @returns {Uint8Array}
+ */
+
+/**
+ * @typedef EncodingDetails
+ * @property {string} label
+ * @property {Encoder} encode
+ * @property {Decoder=} decode
+ */
+
+/**
+ * 
+ * @param {EncodingDetails} details
+ */
 function addEncoding({label, encode, decode}) {
   const encodingId = listeners.length;
   const template = document.createElement("template");
@@ -114,20 +137,20 @@ function addEncoding({label, encode, decode}) {
 
 addEncoding({
   label: "Plain text",
-  encode: v => v,
-  decode: v => v
+  encode: v => new TextDecoder().decode(v),
+  decode: v => new TextEncoder().encode(v)
 });
 
 addEncoding({
   label: "Base64",
-  encode: v => bytesToB64(new TextEncoder().encode(v)),
-  decode: v => new TextDecoder().decode(b64toBytes(v)),
+  encode: bytesToB64,
+  decode: b64toBytes,
 });
 
 addEncoding({
   label: "Base64Url",
-  encode: v => bytesToB64(new TextEncoder().encode(v)).replace(/\//g, '_').replace(/\+/g, '-'),
-  decode: v => new TextDecoder().decode(b64toBytes(v.replace(/_/g, "/").replace(/-/g, "+"))),
+  encode: v => bytesToB64(v).replace(/\//g, '_').replace(/\+/g, '-'),
+  decode: v => b64toBytes(v.replace(/_/g, "/").replace(/-/g, "+")),
 });
 
 function lpad(s, l) {
@@ -137,10 +160,9 @@ function lpad(s, l) {
 
 addEncoding({
   label: "Hexadecimal dump",
-  encode: v => bytesToHex(new TextEncoder().encode(v)),
+  encode: v => bytesToHex(v),
   decode: v => {
     const noSpaces = v.replace(/\s/g, '');
-    console.log(noSpaces);
     if (! /^(?:[a-fA-F\d]{2})+$/.test(noSpaces)) {
       throw new Error("Invalid hex dump : " + v);
     }
@@ -155,19 +177,19 @@ addEncoding({
       }
       isHigh = !isHigh;
     }
-    return new TextDecoder().decode(new Uint8Array(bytes));
+    return new Uint8Array(bytes);
   },
 });
 
 addEncoding({
   label: "Byte array",
-  encode: v => `[${[...new TextEncoder().encode(v)].map(String).join(', ')}]`,
+  encode: v => `[${[...v].map(String).join(', ')}]`,
   decode: v => {
     const bytes = JSON.parse(v);
     if (! Array.isArray(bytes) || bytes.some(b => typeof b !== "number" || b < 0 || b > 255)) {
       throw new Error("Invalid byte array : " + v);
     }
-    return new TextDecoder().decode(new Uint8Array(bytes));
+    return new Uint8Array(bytes);
   },
 });
 
@@ -256,10 +278,10 @@ function b64toBytes(b64) {
 ["SHA-1", "SHA-256"].forEach(algorithm => {
   addEncoding({
     label: `${algorithm} - Hex`,
-    encode: async v => bytesToHex(new Uint8Array(await crypto.subtle.digest(algorithm, new TextEncoder().encode(v))), ""),
+    encode: async v => bytesToHex(new Uint8Array(await crypto.subtle.digest(algorithm, v)), ""),
   });
   addEncoding({
     label: `${algorithm} - Base64`,
-    encode: async v => bytesToB64(new Uint8Array(await crypto.subtle.digest(algorithm, new TextEncoder().encode(v)))),
+    encode: async v => bytesToB64(new Uint8Array(await crypto.subtle.digest(algorithm, v))),
   });
 });
