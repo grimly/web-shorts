@@ -36,6 +36,17 @@
                max="100"
         />
       </div>
+      <div class="col">
+        <label id="uuidVersionLabel" for="uuidVersion">Version</label>
+        <select id="uuidVersion"
+                name="uuidVersion"
+                class="form-control"
+                aria-labelledby="uuidVersionLabel"
+        >
+          <option value="V4" selected>UUID V4</option>
+          <option value="V7">UUID V7</option>
+        </select>
+      </div>
     </form>
     <form id="uuidForm">
       <div class="mb-3">
@@ -62,7 +73,7 @@
   </div>
   <script type="module">
     import { fromEvent, concat, of, merge, switchMap, map, tap, startWith, distinctUntilChanged } from "https://esm.sh/rxjs@7.8.1";
-    import { randomUUID } from "./uuid.js";
+    import { randomUUIDV4, randomUUIDV7 } from "./uuid.js";
 
     const configForm = document.forms.config;
     const configuration = merge(
@@ -93,7 +104,7 @@
         switchMap(conf => concat(of(undefined), regenerate).pipe(
           map(() => conf),
         )),
-        map(({uuidCount}) => Array.from({length: uuidCount}, randomUUID).join("\n")),
+        map(({uuidCount, uuidVersion}) => Array.from({length: uuidCount}, uuidVersion === "V7" ? randomUUIDV7 : randomUUIDV4 ).join("\n")),
       )
       .subscribe(r => result.value = r);
 
